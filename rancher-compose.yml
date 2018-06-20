@@ -1,0 +1,14 @@
+version: '2'
+services:
+  redis-sentinel:
+    start_on_create: true
+    scale: 3
+    retain_ip: true
+  redis-server:
+    start_on_create: true
+    retain_ip: true
+    scale: 3
+  redislb:
+    start_on_create: true
+    scale: 3
+    retain_ip: true
