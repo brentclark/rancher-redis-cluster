@@ -1,7 +1,7 @@
 # rancher-redis-cluster
 rancher-redis-cluster
 
-This is my version is running Redis / Sentinel, for High Availability, on the Rancher.
+This is my version is running Redis and Sentinel, for High Availability, on Rancher.
 
 Both redis-server and redis-sentinel image(s) will automatically find the Redis / Sentinel instances, will promote a master and monitor each other.
 
