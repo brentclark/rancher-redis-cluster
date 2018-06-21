@@ -21,11 +21,12 @@ else
   sed -i -E "s/^ *# +slaveof +.*$/slaveof $master_ip 6379/g" /usr/local/etc/redis/redis.conf
 fi
 
-#if [ -n "${REDIS_PASSWORD}" ]; then
+if [ -n "${REDIS_PASSWORD}" ]; then
   sed -i -E "s/^ *# +requirepass +.*$/requirepass ${REDIS_PASSWORD}/g" /usr/local/etc/redis/redis.conf
   sed -i -E "s/^ *# +masterauth +.*$/masterauth ${REDIS_PASSWORD}/g" /usr/local/etc/redis/redis.conf
-#fi
+fi
 
+# Here we do a clean up (I.e. Remove *all* lines that start with comments and / or are empty)
 sed -i -E "s/#.*$//" /usr/local/etc/redis/redis.conf
 sed -i -E "/^\s*$/d" /usr/local/etc/redis/redis.conf
 
