@@ -1,5 +1,4 @@
 # rancher-redis-cluster
-rancher-redis-cluster
 
 This is my version is running Redis and Sentinel, for High Availability, on Rancher.
 
