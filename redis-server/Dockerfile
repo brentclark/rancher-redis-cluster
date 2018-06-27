@@ -7,7 +7,7 @@ RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -qq -fy --no-install-recomme
 
 ADD redis.conf /usr/local/etc/redis/redis.conf
 
-RUN wget https://github.com/rancher/giddyup/releases/download/v0.19.0/giddyup -P /usr/local/bin
+RUN wget --no-check-certificate https://github.com/rancher/giddyup/releases/download/v0.19.0/giddyup -P /usr/local/bin
 RUN chmod +x /usr/local/bin/giddyup
 
 RUN echo "net.core.somaxconn=65535" >> /etc/sysctl.conf \
@@ -15,7 +15,7 @@ RUN echo "net.core.somaxconn=65535" >> /etc/sysctl.conf \
   && echo "vm.swappiness=0" >> /etc/sysctl.conf 
 
 RUN sed -i -E "s/^ *bind +.*$/bind 0.0.0.0/g" /usr/local/etc/redis/redis.conf \
-#  && sed -i -E "s/^ *loglevel +.*$/loglevel debug/g" /usr/local/etc/redis/redis.conf \
+  && sed -i -E "s/^ *loglevel +.*$/loglevel debug/g" /usr/local/etc/redis/redis.conf \
   && sed -i -E "s/^ *dir +.*$/dir \/data/g" /usr/local/etc/redis/redis.conf \
 #  && sed -i -E "s/^ *# +cluster-config-file +(.*)$/cluster-config-file \1/g" /etc/redis/redis.conf \
 #  && sed -i -E "s/^ *# +cluster-node-timeout +(.*)$/cluster-node-timeout \1/g" /etc/redis/redis.conf \

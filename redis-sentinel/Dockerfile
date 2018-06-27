@@ -5,7 +5,7 @@ RUN apt-get update -qq
 RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -qq -fy dist-upgrade
 RUN DEBIAN_FRONTEND=noninteractive /usr/bin/apt-get -qq -fy --no-install-recommends --no-install-suggests install curl wget jq
 
-RUN wget https://github.com/rancher/giddyup/releases/download/v0.19.0/giddyup -P /usr/local/bin
+RUN wget --no-check-certificate https://github.com/rancher/giddyup/releases/download/v0.19.0/giddyup -P /usr/local/bin
 RUN chmod +x /usr/local/bin/giddyup
 
 ADD sentinel.conf /usr/local/etc/redis/sentinel.conf

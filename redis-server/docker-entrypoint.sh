@@ -10,7 +10,7 @@ my_ip=$(giddyup ip myip)
 master_ip=$(giddyup leader get)
 
 if redis-cli -h redis-sentinel -p 26379 ping; then
-	master_ip=$(redis-cli -h redis-sentinel -p 26379 --raw sentinel get-master-addr-by-name mymaster | head -n 1)
+    master_ip=$(redis-cli -h redis-sentinel -p 26379 --raw sentinel get-master-addr-by-name mymaster | head -n 1)
 fi
 
 if [ "$my_ip" == "$master_ip" ]
@@ -21,12 +21,11 @@ else
   sed -i -E "s/^ *# +slaveof +.*$/slaveof $master_ip 6379/g" /usr/local/etc/redis/redis.conf
 fi
 
-if [ -n "${REDIS_PASSWORD}" ]; then
+#if [ -n "${REDIS_PASSWORD}" ]; then
   sed -i -E "s/^ *# +requirepass +.*$/requirepass ${REDIS_PASSWORD}/g" /usr/local/etc/redis/redis.conf
   sed -i -E "s/^ *# +masterauth +.*$/masterauth ${REDIS_PASSWORD}/g" /usr/local/etc/redis/redis.conf
-fi
+#fi
 
-# Here we do a clean up (I.e. Remove *all* lines that start with comments and / or are empty)
 sed -i -E "s/#.*$//" /usr/local/etc/redis/redis.conf
 sed -i -E "/^\s*$/d" /usr/local/etc/redis/redis.conf
 

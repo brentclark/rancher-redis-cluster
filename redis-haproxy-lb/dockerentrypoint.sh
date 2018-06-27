@@ -27,9 +27,9 @@ backend redis-node${a}
   balance first
   option tcp-check
   tcp-check send AUTH\ ${REDIS_PASSWORD}\r\n
-  #tcp-check expect string +OK
-  #tcp-check send info\ replication\r\n
-  #tcp-check expect string role:master
+  tcp-check expect string +OK
+  tcp-check send info\ replication\r\n
+  tcp-check expect string role:master
   tcp-check send PING\r\n
   tcp-check expect string +PONG
   tcp-check send info\ replication\r\n
@@ -68,7 +68,7 @@ backend check_master_redis-${a}
   tcp-check expect string +OK" >> "${CONFIGFILE}"
 
   for (( b=0; b<${#REDIS_SERVERS[@]}; b++ )); do
-    echo "  server redis-${a}:${SENTINEL_SERVERS[b]}:26379 ${SENTINEL_SERVERS[b]}:26379 check inter 2s" >> "${CONFIGFILE}"
+    echo "  server redis-${b}:${SENTINEL_SERVERS[b]}:26379 ${SENTINEL_SERVERS[b]}:26379 check inter 2s" >> "${CONFIGFILE}"
   done
   for (( c=0; c<${#SENTINEL_SERVERS[@]}; c++ )); do
     echo "  server redis-sentinel${c}:${SENTINEL_SERVERS[c]}:26379 ${SENTINEL_SERVERS[c]}:26379 check inter 2s" >> "${CONFIGFILE}"
