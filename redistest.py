@@ -27,10 +27,9 @@ def main():
 	try:
 	    r = redis.StrictRedis(host=redis_host, port=redis_port, password=redis_password, decode_responses=True)
 	    r.set(chars, digits)
+            print ("Key: {} and Value: {}".format(chars, digits) )
 	except Exception as e:
 	    print(e)
-
-	print ("Key: {} and Value: {}".format(chars, digits) )
 
 if __name__ == '__main__':
     main()
