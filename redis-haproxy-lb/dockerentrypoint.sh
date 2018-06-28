@@ -1,3 +1,4 @@
+ndex d70750d..943c633 100755
 #!/bin/bash
 
 REDIS_SERVERS=($(dig +short redis-server | sed 's/\n//'))
@@ -9,8 +10,8 @@ frontend redis-cluster
   mode tcp
   option tcplog
   bind *:6378 
-  #acl network_allowed src ${REDIS_ACL}
-  #tcp-request connection reject if !network_allowed" > "${CONFIGFILE}"
+  acl network_allowed src ${HAPROXY_ACL}
+  tcp-request connection reject if !network_allowed" > "${CONFIGFILE}"
 
 for (( a=0; a<${#REDIS_SERVERS[@]}; a++ )); do
   echo "  use_backend redis-node${a} if { srv_is_up(redis-node${a}/redis-${a}:${REDIS_SERVERS[a]}:6379) } { nbsrv(check_master_redis-${a}) ge 3 }" >> "${CONFIGFILE}"
@@ -27,16 +28,13 @@ backend redis-node${a}
   balance first
   option tcp-check
   tcp-check send AUTH\ ${REDIS_PASSWORD}\r\n
-  tcp-check expect string +OK
-  tcp-check send info\ replication\r\n
-  tcp-check expect string role:master
   tcp-check send PING\r\n
   tcp-check expect string +PONG
   tcp-check send info\ replication\r\n
   tcp-check expect string role:master
   tcp-check send QUIT\r\n
   tcp-check expect string +OK
-  server redis-${a}:"${REDIS_SERVERS[a]}":6379 "${REDIS_SERVERS[a]}":6379 maxconn 5000 check inter 1s" >> "${CONFIGFILE}"
+  server redis-${a}:"${REDIS_SERVERS[a]}":6379 "${REDIS_SERVERS[a]}":6379 maxconn 3000 check inter 1s" >> "${CONFIGFILE}"
 done
 
 echo "
@@ -52,7 +50,7 @@ backend redis-cluster
   tcp-check expect string loading:0" >> "${CONFIGFILE}"
 
 for (( a=0; a<${#REDIS_SERVERS[@]}; a++ )); do
-  echo "  server redis-${a}:${REDIS_SERVERS[a]}:6379 ${REDIS_SERVERS[a]}:6379 maxconn 5000 check inter 1s" >> "${CONFIGFILE}"
+  echo "  server redis-${a}:${REDIS_SERVERS[a]}:6379 ${REDIS_SERVERS[a]}:6379 maxconn 3000 check inter 1s" >> "${CONFIGFILE}"
 done
 
 for (( a=0; a<${#REDIS_SERVERS[@]}; a++ )); do
