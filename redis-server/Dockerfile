@@ -15,7 +15,7 @@ RUN echo "net.core.somaxconn=65535" >> /etc/sysctl.conf \
   && echo "vm.swappiness=0" >> /etc/sysctl.conf 
 
 RUN sed -i -E "s/^ *bind +.*$/bind 0.0.0.0/g" /usr/local/etc/redis/redis.conf \
-  && sed -i -E "s/^ *loglevel +.*$/loglevel debug/g" /usr/local/etc/redis/redis.conf \
+#  && sed -i -E "s/^ *loglevel +.*$/loglevel debug/g" /usr/local/etc/redis/redis.conf \
   && sed -i -E "s/^ *dir +.*$/dir \/data/g" /usr/local/etc/redis/redis.conf \
 #  && sed -i -E "s/^ *# +cluster-config-file +(.*)$/cluster-config-file \1/g" /etc/redis/redis.conf \
 #  && sed -i -E "s/^ *# +cluster-node-timeout +(.*)$/cluster-node-timeout \1/g" /etc/redis/redis.conf \
